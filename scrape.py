@@ -10,7 +10,18 @@ links = soup.select('.storylink')
 subtext = soup.select('.subtext')
 
 
+def sort_stories_by_vote(hn_list):
+    """
+    Called by the create_custom_hn function to order the items based on vote score (highest to lowest)
+    """
+    return sorted(hn_list, key=lambda k: k['votes'], reverse=True)
+
+
 def create_custom_hn(links, subtext):
+    """
+    Scrape the data to pull the title, link href and vote value for each item in the Hacker News page
+    Converts the vote value to an int and filters items that only have a vote value of over 99
+    """
     hn = []
 
     for idx, item in enumerate(links):
@@ -24,7 +35,7 @@ def create_custom_hn(links, subtext):
         if points > 99:
             hn.append({'title': title, 'link': href, 'votes': points})
 
-    return hn
+    return sort_stories_by_vote(hn)
 
 
 pprint.pprint(create_custom_hn(links, subtext))
